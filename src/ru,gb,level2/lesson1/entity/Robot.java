@@ -6,10 +6,10 @@ public class Robot implements Motion {
     private int jumpHeigh;
 
 
-    public Robot(String version,int runDistation, int jumpHeigh){
-        this.version=version;
+    public Robot(String version, int runDistation, int jumpHeigh) {
+        this.version = version;
         this.runDistation = runDistation;
-        this.jumpHeigh=jumpHeigh;
+        this.jumpHeigh = jumpHeigh;
     }
 
     @Override

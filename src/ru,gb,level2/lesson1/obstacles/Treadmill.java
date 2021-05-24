@@ -2,7 +2,7 @@ package obstacles;
 
 import entity.Motion;
 
-public class Treadmill implements Obstacles{
+public class Treadmill implements Obstacles {
     private int lenght;
 
     public Treadmill(int lenght) {
@@ -23,7 +23,7 @@ public class Treadmill implements Obstacles{
             System.out.println(motion + "пробежал дистанцию длиной " + lenght);
             return true;
         } else {
-            System.out.println(motion + "не смог преодолеть дистанцию длиной = " +  lenght);
+            System.out.println(motion + "не смог преодолеть дистанцию длиной = " + lenght);
             return false;
         }
     }

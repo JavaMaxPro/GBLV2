@@ -23,7 +23,7 @@ public class Wall implements Obstacles {
             System.out.println(motion + "перепрыгнул через стену");
             return true;
         } else {
-            System.out.println(motion + "не смог преодолеть стену высотой = "+ height);
+            System.out.println(motion + "не смог преодолеть стену высотой = " + height);
             return false;
         }
     }
