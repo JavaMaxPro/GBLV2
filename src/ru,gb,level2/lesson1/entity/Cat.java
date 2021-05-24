@@ -20,4 +20,13 @@ public class Cat implements Motion {
     public int jump() {
         return jumpHeigh;
     }
+
+    @Override
+    public String toString() {
+        return "Cat{" +
+                "name='" + name + '\'' +
+                ", runDistation=" + runDistation +
+                ", jumpHeigh=" + jumpHeigh +
+                '}';
+    }
 }

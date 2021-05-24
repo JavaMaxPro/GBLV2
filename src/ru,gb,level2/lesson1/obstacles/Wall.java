@@ -20,7 +20,7 @@ public class Wall implements Obstacles {
     @Override
     public boolean pastObstacles(Motion motion) {
         if (motion.jump() >= height) {
-            System.out.println(motion + "перепрыгнул через стену");
+            System.out.println(motion + "перепрыгнул через стену высотой ="+ height);
             return true;
         } else {
             System.out.println(motion + "не смог преодолеть стену высотой = " + height);

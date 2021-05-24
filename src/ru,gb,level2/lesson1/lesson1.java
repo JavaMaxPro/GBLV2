@@ -12,6 +12,7 @@ public class lesson1 {
     public static Motion[] motions;
     public static Obstacles[] obstacles;
 
+
     public static void main(String[] args) {
         Motion human = new Human("Vasya", 1020, 30);
         Motion cat = new Cat("Kuzya", 5600, 50);
@@ -21,6 +22,15 @@ public class lesson1 {
 
         Wall wall = new Wall(random.nextInt(30));
         Treadmill treadmill = new Treadmill(random.nextInt(3000));
+
+        motions = new  Motion[3];
+        motions[0]= human;
+        motions[1]= cat;
+        motions[2]= robot;
+        obstacles = new Obstacles[2];
+        obstacles[0]=wall;
+        obstacles[1]=treadmill;
+
 
         boolean yes;
         System.out.println("Старт");
@@ -34,13 +44,13 @@ public class lesson1 {
         }
     }
 
-    public void setMotions(Motion... motions) {
+   /* public void setMotions(Motion... motions) {
         lesson1.motions = motions;
     }
 
     public void setObstacles(Obstacles... obstacles) {
         lesson1.obstacles = obstacles;
-    }
+    }*/
 
     public static boolean allObstalces(Motion motion) {
         for (Obstacles obstacle : obstacles

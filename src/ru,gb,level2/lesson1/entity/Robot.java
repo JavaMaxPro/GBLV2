@@ -21,4 +21,13 @@ public class Robot implements Motion {
     public int jump() {
         return jumpHeigh;
     }
+
+    @Override
+    public String toString() {
+        return "Robot{" +
+                "version='" + version + '\'' +
+                ", runDistation=" + runDistation +
+                ", jumpHeigh=" + jumpHeigh +
+                '}';
+    }
 }

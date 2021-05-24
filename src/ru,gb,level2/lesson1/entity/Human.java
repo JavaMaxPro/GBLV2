@@ -21,4 +21,13 @@ public class Human implements Motion {
     public int jump() {
         return jumpHeigh;
     }
+
+    @Override
+    public String toString() {
+        return "Human{" +
+                "name='" + name + '\'' +
+                ", runDistation=" + runDistation +
+                ", jumpHeigh=" + jumpHeigh +
+                '}';
+    }
 }
