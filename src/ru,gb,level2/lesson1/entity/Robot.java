@@ -1,3 +1,5 @@
+package entity;
+
 public class Robot {
     private String name;
     private int version;

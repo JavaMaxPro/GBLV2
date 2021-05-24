@@ -1,3 +1,5 @@
+package entity;
+
 public class Human {
     private String firstName;
     private String lastName;
