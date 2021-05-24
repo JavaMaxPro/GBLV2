@@ -1,21 +1,24 @@
 package entity;
 
-public class Human {
-    private String firstName;
-    private String lastName;
-    private int age;
+public class Human implements Motion{
+    private String name;
+
     private int runDistation;
-    private int jumpHigh;
+    private int jumpHeigh;
 
-    public Human(String firstName,String lastName,int age ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-    }
-    public Human(String firstName,String lastName,int age,int runDistation,int jumpHigh ){
-        this(firstName,lastName,age);
+    public Human(String name,int runDistation,int jumpHeigh ){
+        this.name=name;
         this.runDistation=runDistation;
-        this.jumpHigh=jumpHigh;
+        this.jumpHeigh=jumpHeigh;
     }
 
+    @Override
+    public int run() {
+        return runDistation;
+    }
+
+    @Override
+    public int jump() {
+        return jumpHeigh;
+    }
 }

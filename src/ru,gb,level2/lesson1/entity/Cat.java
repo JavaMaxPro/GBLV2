@@ -1,19 +1,23 @@
 package entity;
 
-public class Cat {
+public class Cat implements Motion{
     private String name;
-    private String age;
     private int runDistation;
-    private int jumpHigh;
+    private int jumpHeigh;
 
-    public Cat(String name, String age) {
+    public Cat(String name,  int runDistation, int jumpHeigh) {
         this.name = name;
-        this.age = age;
+        this.runDistation = runDistation;
+        this.jumpHeigh = jumpHeigh;
     }
 
-    public Cat(String name, String age, int runDistation, int jumpHigh) {
-        this(name,age);
-        this.runDistation = runDistation;
-        this.jumpHigh = jumpHigh;
+    @Override
+    public int run() {
+        return runDistation;
+    }
+
+    @Override
+    public int jump() {
+        return jumpHeigh;
     }
 }

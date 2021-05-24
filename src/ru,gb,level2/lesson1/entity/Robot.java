@@ -1,18 +1,24 @@
 package entity;
 
-public class Robot {
-    private String name;
-    private int version;
+public class Robot implements Motion {
+    private String version;
     private int runDistation;
-    private int jumpHigh;
+    private int jumpHeigh;
 
-    public Robot(String name,int version){
-        this.name=name;
+
+    public Robot(String version,int runDistation, int jumpHeigh){
         this.version=version;
-    }
-    public Robot(String name,int version,int runDistation, int jumpHigh){
-        this(name,version);
         this.runDistation = runDistation;
-        this.jumpHigh=jumpHigh;
+        this.jumpHeigh=jumpHeigh;
+    }
+
+    @Override
+    public int run() {
+        return runDistation;
+    }
+
+    @Override
+    public int jump() {
+        return jumpHeigh;
     }
 }
