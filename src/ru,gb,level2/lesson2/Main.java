@@ -5,7 +5,7 @@ public class Main {
     private static final String[][] MAS = new String[][]{
             {"1", "2", "3", "4"},
             {"1", "2", "3", "4"},
-            {"1", "2", "3", "4"},
+            {"I", "2", "3", "4"},
             {"1", "2", "3", "4"},
     };
     private static final int ARRAY_SIZE = 4;
@@ -17,8 +17,10 @@ public class Main {
             System.out.println("Сумма массива = "+sum);
         } catch (MyArraySizeException e) {
             System.out.println("Ошибка размерности массива");
+            e.printStackTrace();
         }catch (MyArrayDataException e){
             System.out.println("Не верные данные в массиве");
+            e.printStackTrace();
         }
 
     }
