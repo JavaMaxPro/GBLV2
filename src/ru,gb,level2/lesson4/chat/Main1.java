@@ -12,10 +12,16 @@ public class Main1 extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("sample.fxml"));
+
+        Parent root = fxmlLoader.load();
         primaryStage.setTitle("Hello World");
         primaryStage.setScene(new Scene(root));
         setStageForSecondScreen(primaryStage);
+
+        Controller controller = fxmlLoader.getController();
+        controller.userList.getItems().addAll("user 1", "user2 ");
         primaryStage.show();
     }
 
