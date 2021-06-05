@@ -16,7 +16,7 @@ public class Main1 extends Application {
         fxmlLoader.setLocation(getClass().getResource("sample.fxml"));
 
         Parent root = fxmlLoader.load();
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Chat");
         primaryStage.setScene(new Scene(root));
         setStageForSecondScreen(primaryStage);
 
