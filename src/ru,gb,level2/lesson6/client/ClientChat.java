@@ -14,14 +14,17 @@ public class ClientChat extends Application {
 
     public static final String NETWORK_ERROR_TITLE = "Сетевая ошибка";
     public static final String NETWORK_ERROR_CONNETCION_TYPE = "Невозможно установить сетевое соединение ";
+    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
+
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("sample.fxml"));
 
         Parent root = fxmlLoader.load();
-        primaryStage.setTitle("Chat");
+        this.primaryStage.setTitle("Chat");
         primaryStage.setScene(new Scene(root));
         setStageForSecondScreen(primaryStage);
 
@@ -30,6 +33,7 @@ public class ClientChat extends Application {
         primaryStage.show();
 
         Controller controller1 = fxmlLoader.getController();
+
         connectToServer(controller1);
     }
 
@@ -42,12 +46,10 @@ public class ClientChat extends Application {
                 return;
             }
 
-
             controller1.setNetworkClient(networkClient);
+            controller1.setApplication(this);
 
-
-
-
+            primaryStage.setOnCloseRequest(windowEvent -> networkClient.close());
     }
 
     private void showErrorDialog(String title, String type, String details) {
@@ -58,7 +60,7 @@ public class ClientChat extends Application {
         alert.showAndWait();
     }
 
-    private void showNetworkErrorDialog(String type, String details) {
+    public void showNetworkErrorDialog(String type, String details) {
         showErrorDialog(NETWORK_ERROR_TITLE, type, details);
     }
 

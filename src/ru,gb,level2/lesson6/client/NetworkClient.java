@@ -55,7 +55,7 @@ public class NetworkClient {
                     String message = socketInput.readUTF();
                     messageHandler.accept(message);
                 } catch (IOException e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                     System.err.println("Failed to read message from server");
                     break;
                 }
