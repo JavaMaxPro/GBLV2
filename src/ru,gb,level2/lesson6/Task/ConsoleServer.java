@@ -11,57 +11,59 @@ public class ConsoleServer {
 
     public static final int PORT = 8289;
     private static Socket socketClient;
+    private static DataInputStream inputStream;
+    private static DataOutputStream outputStream;
+    private static ServerSocket serverSocket;
 
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(PORT);
             System.out.println("Сервер запущен ожидаем соединения");
 
             socketClient = serverSocket.accept();
             System.out.println("Клиент подкючен");
 
-            DataInputStream inputStream = new DataInputStream(socketClient.getInputStream());
-            DataOutputStream outputStream = new DataOutputStream(socketClient.getOutputStream());
+            inputStream = new DataInputStream(socketClient.getInputStream());
+            outputStream = new DataOutputStream(socketClient.getOutputStream());
 
-            processConnection(inputStream,outputStream);
+            processConnection(inputStream, outputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private static void processConnection(DataInputStream inputStream, DataOutputStream outputStream) {
-        Thread threadIn = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        String msg = inputStream.readUTF();
-                        System.out.println("Client : " + msg);
-                        if (msg.equals("/end")) {
-                            socketClient.close();
-                            return;
-                        }
-                    } catch (IOException e) {
-                        System.out.println("Connection has been closed");
+        Thread threadIn = new Thread(() -> {
+            while (true) {
+                try {
+                    String msg = inputStream.readUTF();
+                    System.out.println("Client : " + msg);
+                    if (msg.equalsIgnoreCase("/end")) {
+                        socketClient.close();
+                        return;
                     }
+                } catch (IOException e) {
+                    try {
+                        socketClient=serverSocket.accept();
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    }
+                    System.out.println("Connection has been closed");
                 }
             }
         });
 
-        Thread threadOut = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Scanner scanner = new Scanner(System.in);
-                    String msgOut = scanner.nextLine();
+        Thread threadOut = new Thread(() -> {
+            while (true) {
+                Scanner scanner = new Scanner(System.in);
+                String msgOut = scanner.nextLine();
 
-                    if(!msgOut.trim().isEmpty()) {
-                        try {
-                            outputStream.writeUTF(msgOut);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            System.out.println("Message not send");
-                        }
+                if(!msgOut.trim().isEmpty()) {
+                    try {
+                        outputStream.writeUTF(msgOut);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.out.println("Message not send");
                     }
                 }
             }
@@ -71,4 +73,5 @@ public class ConsoleServer {
         threadOut.start();
 
     }
+
 }
