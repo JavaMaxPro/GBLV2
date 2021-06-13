@@ -42,6 +42,7 @@ public class ClientClass {
                     }
                 } catch (IOException e) {
                     System.out.println("Connection has been closed");
+                    break;
                 }
             }
         }).start();
@@ -60,6 +61,7 @@ public class ClientClass {
                     } catch (IOException e) {
                         e.printStackTrace();
                         System.out.println("Message not send");
+                        break;
                     }
                 }
             }
