@@ -8,7 +8,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/ru,gb,level2/lesson1" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/ru,gb,level2/lesson2" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/ru,gb,level2/lesson4" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/ru,gb,level2/lesson5" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/src/ru,gb,level2" />
     </content>
     <orderEntry type="inheritedJdk" />
