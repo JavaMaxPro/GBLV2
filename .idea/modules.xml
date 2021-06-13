@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/GBLV2.iml" filepath="$PROJECT_DIR$/GBLV2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NetworkChatServer/NetworkChatServer.iml" filepath="$PROJECT_DIR$/NetworkChatServer/NetworkChatServer.iml" />
     </modules>
   </component>
 </project>
