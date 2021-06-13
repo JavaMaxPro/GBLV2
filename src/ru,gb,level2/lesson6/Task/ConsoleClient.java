@@ -72,7 +72,8 @@ public class ConsoleClient {
             threadOut.start();
 
     }
-
+*/
+    /*
     public static void close() {
         try {
             socketClient.close();
