@@ -29,9 +29,8 @@ public class MyServer {
         Socket clientSocket = serverSocket.accept();
         System.out.println("Client connect");
         ClientHandler clientHandler = new ClientHandler(this, clientSocket);
-        clients.add(clientHandler);
+//        clients.add(clientHandler);
         clientHandler.handle();
-
     }
 
     public void broadcastMessage(String message, ClientHandler sender) throws IOException {
@@ -42,4 +41,13 @@ public class MyServer {
             }
         }
     }
+
+    public void subscribe(ClientHandler clientHandler){
+        clients.add(clientHandler);
+    }
+    public void unsubscribe(ClientHandler clientHandler){
+        clients.remove(clientHandler);
+    }
+
+
 }

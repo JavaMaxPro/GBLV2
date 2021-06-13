@@ -21,12 +21,14 @@ public class ClientHandler {
         outputStream = new DataOutputStream(clientSocket.getOutputStream());
         new Thread(() -> {
             try {
+                server.subscribe(this);
                 readMessages();
             } catch (IOException e) {
                 System.err.println("Failed to process message from client");
 //                e.printStackTrace();
             } finally {
                 try {
+                    server.unsubscribe(this);
                     closeConnection();
                 } catch (IOException e) {
                     System.err.println("Failed to close connection");
