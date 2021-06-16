@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.gb.java2.chat.client.Controller">
+   <top>
+      <Label text="CHAT" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" BorderPane.alignment="CENTER" />
+   </top>
+   <bottom>
+      <HBox fillHeight="false" maxHeight="50.0" prefWidth="598.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="messageTextArea" maxHeight="-Infinity" onKeyPressed="#sendMessageAreaP" prefHeight="50.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+               <HBox.margin>
+                  <Insets bottom="5.0" left="5.0" top="5.0" />
+               </HBox.margin></TextArea>
+            <Button fx:id="sendMessageButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendMessage" prefHeight="50.0" prefWidth="150.0" text="Отправить">
+               <HBox.margin>
+                  <Insets bottom="5.0" right="5.0" top="5.0" />
+               </HBox.margin></Button>
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <TextArea fx:id="chatTextArea" editable="false" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="5.0" right="5.0" />
+         </BorderPane.margin></TextArea>
+   </center>
+   <right>
+      <ListView fx:id="userList" prefHeight="200.0" prefWidth="150.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets right="5.0" />
+         </BorderPane.margin>
+         <opaqueInsets>
+            <Insets bottom="5.0" />
+         </opaqueInsets></ListView>
+   </right>
+</BorderPane>

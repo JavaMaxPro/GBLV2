@@ -1,5 +1,7 @@
 package ru.gb.java2.chat.server.chat;
 
+import ru.gb.java2.chat.server.chat.auth.AuthService;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,9 +12,13 @@ public class MyServer {
 
     private final List<ClientHandler> clients = new ArrayList<>();
 
+
+    private AuthService authService;
+
     public void start(int port) {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("Server has been started");
+            authService = new AuthService();
 
             while (true) {
                 waitAndProcessNewClientConnection(serverSocket);
@@ -35,18 +41,24 @@ public class MyServer {
 
     public void broadcastMessage(String message, ClientHandler sender) throws IOException {
         for (ClientHandler client : clients) {
-            client.sendMessage(message);
+           // client.sendMessage(message);
             if (client != sender) {
                 client.sendMessage(message);
+                System.out.println(client);
             }
         }
     }
 
-    public void subscribe(ClientHandler clientHandler){
+    public void subscribe(ClientHandler clientHandler) {
         clients.add(clientHandler);
     }
-    public void unsubscribe(ClientHandler clientHandler){
+
+    public void unsubscribe(ClientHandler clientHandler) {
         clients.remove(clientHandler);
+    }
+
+    public AuthService getAuthService() {
+        return authService;
     }
 
 
