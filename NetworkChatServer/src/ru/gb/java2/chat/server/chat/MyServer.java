@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MyServer {
 
     private final List<ClientHandler> clients = new ArrayList<>();
+    private final Map<String,ClientHandler> clientsUser = new HashMap<>();
 
 
     private AuthService authService;
@@ -40,17 +43,24 @@ public class MyServer {
     }
 
     public void broadcastMessage(String message, ClientHandler sender) throws IOException {
-        for (ClientHandler client : clients) {
-           // client.sendMessage(message);
-            if (client != sender) {
-                client.sendMessage(message);
-                System.out.println(client);
-            }
+        // client.sendMessage(message);
+        if (message.startsWith("/w")) {
+            String[] parts = message.split(" ");
+            String username = parts[1];
+            clientsUser.get(username).sendMessage(message);
+        }
+        else {
+            for (ClientHandler client : clients)
+                if (client != sender) {
+                    client.sendMessage(message);
+                    System.out.println(client);
+                }
         }
     }
 
-    public void subscribe(ClientHandler clientHandler) {
+    public void subscribe(String username, ClientHandler clientHandler) {
         clients.add(clientHandler);
+        clientsUser.put(username,clientHandler);
     }
 
     public void unsubscribe(ClientHandler clientHandler) {

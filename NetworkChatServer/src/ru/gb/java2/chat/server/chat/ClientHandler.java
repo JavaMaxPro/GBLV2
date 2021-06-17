@@ -56,7 +56,7 @@ public class ClientHandler {
                 else{
                     sendMessage(String.format("%s %s",AUTH_OK_COMMAND,username));
                     System.out.println(AUTH_OK_COMMAND);
-                    server.subscribe(this);
+                    server.subscribe(username,this);
                     return;
                 }
             }

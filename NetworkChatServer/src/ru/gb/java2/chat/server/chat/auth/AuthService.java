@@ -24,7 +24,6 @@ public class AuthService {
                 return user.getUsername();
             }
         }
-
         return null;
     }
 }
