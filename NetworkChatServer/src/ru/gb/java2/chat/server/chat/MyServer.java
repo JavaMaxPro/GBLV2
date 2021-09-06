@@ -1,5 +1,6 @@
 package ru.gb.java2.chat.server.chat;
 
+import ru.gb.java2.chat.clientserver.Command;
 import ru.gb.java2.chat.server.chat.auth.AuthService;
 
 import java.io.IOException;
@@ -44,17 +45,28 @@ public class MyServer {
 
     public void broadcastMessage(String message, ClientHandler sender) throws IOException {
         // client.sendMessage(message);
-        if (message.startsWith("/w")) {
-            String[] parts = message.split(" ");
-            String username = parts[1];
-            clientsUser.get(username).sendMessage(message);
-        }
-        else {
             for (ClientHandler client : clients)
                 if (client != sender) {
-                    client.sendMessage(message);
+                    client.sendCommand(Command.clientMessageCommand(sender.getUsername(),message));
                     System.out.println(client);
                 }
+    }
+
+    public synchronized boolean isUsernameBusy(String username) {
+        for (ClientHandler client : clients) {
+            if (client.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public synchronized void sendPrivateMessage(ClientHandler sender, String recipient, String privateMessage) throws IOException {
+        for (ClientHandler client : clients) {
+            if (client != sender && client.getUsername().equals(recipient)) {
+                client.sendCommand(Command.clientMessageCommand(sender.getUsername(), privateMessage));
+                break;
+            }
         }
     }
 

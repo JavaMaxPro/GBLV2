@@ -1,12 +1,5 @@
-import entity.Cat;
-import entity.Human;
 import entity.Motion;
-import entity.Robot;
 import obstacles.Obstacles;
-import obstacles.Treadmill;
-import obstacles.Wall;
-
-import java.util.Random;
 
 public class lesson1 {
     public static Motion[] motions;
@@ -14,34 +7,7 @@ public class lesson1 {
 
 
     public static void main(String[] args) {
-        Motion human = new Human("Vasya", 1020, 30);
-        Motion cat = new Cat("Kuzya", 5600, 50);
-        Motion robot = new Robot("Andromeda", 4000, 10);
 
-        Random random = new Random();
-
-        Wall wall = new Wall(random.nextInt(30));
-        Treadmill treadmill = new Treadmill(random.nextInt(3000));
-
-        motions = new  Motion[3];
-        motions[0]= human;
-        motions[1]= cat;
-        motions[2]= robot;
-        obstacles = new Obstacles[2];
-        obstacles[0]=wall;
-        obstacles[1]=treadmill;
-
-
-        boolean yes;
-        System.out.println("Старт");
-        for (Motion motion : motions
-        ) {
-            yes = allObstalces(motion);
-            if (!yes) System.out.println(motion + " выбыл ");
-            else System.out.println(motion + " прошел ");
-
-
-        }
     }
 
    /* public void setMotions(Motion... motions) {

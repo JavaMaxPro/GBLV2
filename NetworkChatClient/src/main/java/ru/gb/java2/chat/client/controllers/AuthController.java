@@ -8,16 +8,15 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import ru.gb.java2.chat.client.ClientChat;
 import ru.gb.java2.chat.client.NetworkClient;
+import ru.gb.java2.chat.clientserver.Command;
+import ru.gb.java2.chat.clientserver.CommandType;
 
-import java.io.IOException;
 import java.util.function.Consumer;
 
 public class AuthController {
     public static final String INVALID_CREDENTIALS = "Неккоретный ввод данных";
     public static final String CREDENTIALS_REQUIRED = "Логин и пароль должны быть указаны";
 
-    public static final String AUTH_COMMAND = "/auth";
-    public static final String AUTH_OK_COMMAND = "/authOk";
     @FXML
     private TextField loginField;
     @FXML
@@ -37,16 +36,11 @@ public class AuthController {
             clientChat.authErrorDialog(INVALID_CREDENTIALS, CREDENTIALS_REQUIRED);
             return;
         }
-
-        String authCommandMessage = String.format("%s %s %s",AUTH_COMMAND,login,password);
-        System.out.println(AUTH_COMMAND);
-        try {
-            network.sendMessage(authCommandMessage);
-            System.out.println("Команда отправлена");
-        } catch (IOException e) {
-            clientChat.showNetworkErrorDialog("Ошибка передачи данных по сети", "Не удалось  отправить сообщение");
-            e.printStackTrace();
-        }
+//        String authCommandMessage = String.format("%s %s %s",AUTH_COMMAND,login,password);
+//        System.out.println(AUTH_COMMAND);
+        //            network.sendMessage(authCommandMessage);
+        network.sendCommand(Command.authCommand(login,password));
+        System.out.println("Команда отправлена");
     }
 
 
@@ -55,10 +49,10 @@ public class AuthController {
     }
     public void setNetwork(NetworkClient network) {
         this.network = network;
-        network.waitMessages(new Consumer<String>() {
+        network.waitMessages(new Consumer<Command>() {
             @Override
-            public void accept(String message) {
-                if(message.startsWith(AUTH_OK_COMMAND)){
+            public void accept(Command command) {
+                if(command.getType()== CommandType.AUTH){
                     Thread.currentThread().interrupt();
                     Platform.runLater(()->{
                         clientChat.getAuthStage().close();

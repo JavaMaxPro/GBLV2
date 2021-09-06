@@ -7,8 +7,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import ru.gb.java2.chat.clientserver.Command;
+import ru.gb.java2.chat.clientserver.commands.PrivateMessageCommandData;
+import ru.gb.java2.chat.clientserver.commands.PublicMessageCommandData;
 
-import java.io.IOException;
 import java.util.Date;
 
 public class Controller {
@@ -29,7 +31,7 @@ public class Controller {
     @FXML
     public void sendMessage() {
         String message = messageTextArea.getText().trim();
-        if(message.isEmpty()){
+        if (message.isEmpty()) {
             messageTextArea.clear();
             return;
         }
@@ -40,13 +42,12 @@ public class Controller {
             chatTextArea.appendText(sender + " : ");
         }
 
-        try {
-            message = sender != null ? String.join(":", sender,message) : message;
-            networkClient.sendMessage(message);
-        } catch (IOException e) {
-//            e.printStackTrace();
-            application.showNetworkErrorDialog("Ошибка передачи данных по сети", "Не удалось  отправить сообщение");
+        if (sender != null) {
+            networkClient.sendCommand(Command.privateMessageCommand(sender, message));
+        } else {
+            networkClient.sendCommand(Command.publicMessageCommand(message));
         }
+        // networkClient.sendMessage(message);
         appendMessageToChat("Я", message);
     }
 
@@ -77,9 +78,34 @@ public class Controller {
     public void setNetworkClient(NetworkClient networkClient) {
 
         this.networkClient = networkClient;
-        networkClient.waitMessages(message -> Platform.runLater(() -> {
-            Controller.this.appendMessageToChat("Server", message);
-        }));
+        networkClient.waitMessages(command -> {
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    Controller.this.commandMessageToChat(command);
+                }
+            });
+        });
+    }
+
+    private void commandMessageToChat(Command command) {
+        String sender = null;
+        String message ;
+        switch (command.getType()){
+            case PRIVATE_MESSAGE: {
+                PrivateMessageCommandData data = (PrivateMessageCommandData) command.getData();
+                sender = data.getReceiver();
+                message = data.getMessage();
+                appendMessageToChat(sender, message);
+                break;
+            }
+            case PUBLIC_MESSAGE: {
+                PublicMessageCommandData data = (PublicMessageCommandData) command.getData();
+                message= data.getMessage();
+                appendMessageToChat(sender,message);
+                break;
+            }
+        }
     }
 
     public void setApplication(ClientChat application) {
