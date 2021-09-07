@@ -32,7 +32,7 @@ public class AuthController {
     public void executeAuth(ActionEvent actionEvent) {
         String login = loginField.getText();
         String password = passwordField.getText();
-        if(login == null || login.isBlank() || password == null || password.isBlank()){
+        if(login == null || login.isEmpty() || password == null || password.isEmpty()){
             clientChat.authErrorDialog(INVALID_CREDENTIALS, CREDENTIALS_REQUIRED);
             return;
         }
