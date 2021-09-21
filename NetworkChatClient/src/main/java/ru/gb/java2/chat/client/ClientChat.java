@@ -13,7 +13,6 @@ import ru.gb.java2.chat.client.controllers.AuthController;
 
 public class ClientChat extends Application {
 
-
     public static final String NETWORK_ERROR_TITLE = "Сетевая ошибка";
     public static final String ATH_ERROR_TITLE = "Аунтентификация";
     public static final String NETWORK_ERROR_CONNETCION_TYPE = "Невозможно установить сетевое соединение ";

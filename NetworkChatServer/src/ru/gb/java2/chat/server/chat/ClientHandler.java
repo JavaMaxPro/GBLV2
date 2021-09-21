@@ -54,25 +54,31 @@ public class ClientHandler {
 
     private void authentication() throws IOException {
         while (true) {
+            System.out.println("тут");
             Command command = readCommand();
             if (command == null) {
+                System.out.println("auth null");
                 continue;
             }
-
+            System.out.println(command.getType());
             if(command.getType() == CommandType.AUTH){
                 AuthCommandData data = (AuthCommandData) command.getData();
                 String login = data.getLogin();
+                System.out.println(login);
                 String password =data.getPassword();
+                System.out.println(password);
 
                 String username = server.getAuthService().getUsernameByLoginAndaPassword(login, password);
                 if (username == null) {
                     sendCommand(Command.errorCommand("Неккоректные логин и пароль!"));
+                    System.out.println("Неккоректные логин и пароль!");
                 } else {
                     if (server.isUsernameBusy(username)) {
                         sendCommand(Command.errorCommand("Такой юзер уже существует!"));
+                        System.out.println("Такой юзер уже существует!");
                     } else {
                         this.username = username;
-                        sendCommand(Command.authORCommand(username));
+                        sendCommand(Command.authOKCommand(username));
                         System.out.println("AUTH_OK_COMMAND");
                         server.subscribe(username, this);
                         return;
@@ -93,7 +99,7 @@ public class ClientHandler {
             System.err.println("Failed to read Command class");
             e.printStackTrace();
         }
-
+        System.out.println(command.getType());
         return command;
     }
 

@@ -24,7 +24,7 @@ public class Command  implements Serializable {
         command.type=CommandType.AUTH;
         return command;
     }
-    public static Command authORCommand(String username) {
+    public static Command authOKCommand(String username) {
         Command command = new Command();
         command.data = new AuthOKCommandData(username);
         command.type=CommandType.AUTH_OK;

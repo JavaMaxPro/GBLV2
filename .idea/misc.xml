@@ -5,7 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/NetworkChatClient/pom.xml" />
         <option value="$PROJECT_DIR$/NetworkChatClientServer/NetworkChat/pom.xml" />
-        <option value="$PROJECT_DIR$/NetworkChatClientServer/pom.xml" />
+        <option value="$PROJECT_DIR$/ChatClientServer/pom.xml" />
       </list>
     </option>
   </component>

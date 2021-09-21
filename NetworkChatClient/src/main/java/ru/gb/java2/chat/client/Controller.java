@@ -8,8 +8,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import ru.gb.java2.chat.clientserver.Command;
+import ru.gb.java2.chat.clientserver.CommandType;
+import ru.gb.java2.chat.clientserver.commands.ClientMessageCommandData;
 import ru.gb.java2.chat.clientserver.commands.PrivateMessageCommandData;
 import ru.gb.java2.chat.clientserver.commands.PublicMessageCommandData;
+import ru.gb.java2.chat.clientserver.commands.UpdateUsersListCommandData;
 
 import java.util.Date;
 
@@ -43,9 +46,9 @@ public class Controller {
         }
 
         if (sender != null) {
-            networkClient.sendCommand(Command.privateMessageCommand(sender, message));
+            networkClient.getInstance().sendCommand(Command.privateMessageCommand(sender, message));
         } else {
-            networkClient.sendCommand(Command.publicMessageCommand(message));
+            networkClient.getInstance().sendCommand(Command.publicMessageCommand(message));
         }
         // networkClient.sendMessage(message);
         appendMessageToChat("Я", message);
@@ -77,14 +80,17 @@ public class Controller {
 
     public void setNetworkClient(NetworkClient networkClient) {
 
-        this.networkClient = networkClient;
-        networkClient.waitMessages(command -> {
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    Controller.this.commandMessageToChat(command);
+        NetworkClient.getInstance().addReadMessageListener(new ReadCommandListener() {
+            @Override
+            public void processReceivedCommand(Command command) {
+                if (command.getType() == CommandType.CLIENT_MESSAGE) {
+                    ClientMessageCommandData data = (ClientMessageCommandData) command.getData();
+                    Platform.runLater(() -> ChatController.this.appendMessageToChat(data.getSender(), data.getMessage()));
+                } else if (command.getType() == CommandType.UPDATE_USERS_LIST) {
+                    UpdateUsersListCommandData data = (UpdateUsersListCommandData) command.getData();
+                    updateUsersList(data.getUsers());
                 }
-            });
+            }
         });
     }
 

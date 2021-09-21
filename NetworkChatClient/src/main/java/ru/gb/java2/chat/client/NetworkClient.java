@@ -6,18 +6,26 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.function.Consumer;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NetworkClient {
+    public static NetworkClient INSTANCE;
 
-    public static final int SERVER_PORT = 8189;
+    public static final int SERVER_PORT = 8182;
     public static final String SERVER_HOST = "localhost";
+
 
     private final String host;
     private final int port;
     private Socket socket;
     private ObjectInputStream socketInput;
     private ObjectOutputStream socketOutput;
+
+    private List<ReadCommandListener> listeners = new CopyOnWriteArrayList<>();
+    private Thread readMessageProcess;
+    private boolean connected;
+
 
     public NetworkClient(String host, int port) {
         this.host = host;
@@ -31,8 +39,10 @@ public class NetworkClient {
     public boolean connect() {
         try {
             socket = new Socket(host, port);
-            socketInput = new ObjectInputStream(socket.getInputStream());
             socketOutput = new ObjectOutputStream(socket.getOutputStream());
+            socketInput = new ObjectInputStream(socket.getInputStream());
+            readMessageProcess = startReadMessageProcess();
+            connected=true;
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,7 +60,12 @@ public class NetworkClient {
 //        }
 //    }
 
-
+    public static NetworkClient getInstance(){
+        if(INSTANCE == null){
+            INSTANCE = new NetworkClient();
+        }
+        return INSTANCE;
+    }
     public void sendCommand(Command command) {
         try {
             socketOutput.writeObject(command);
@@ -60,7 +75,27 @@ public class NetworkClient {
         }
     }
 
-    public void waitMessages(Consumer<Command> messageHandler) {
+//    public void waitMessages(Consumer<Command> messageHandler) {
+//        Thread thread = new Thread(() -> {
+//            while (true) {
+//                try {
+//                    if (Thread.currentThread().isInterrupted()) {
+//                        break;
+//                    }
+//                    Command command = readCommand();
+//                    messageHandler.accept(command);
+//                } catch (IOException e) {
+////                    e.printStackTrace();
+//                    System.err.println("Failed to read message from server");
+//                    break;
+//                }
+//            }
+//        });
+//        thread.setDaemon(true);
+//        thread.start();
+//    }
+
+    private Thread startReadMessageProcess() {
         Thread thread = new Thread(() -> {
             while (true) {
                 try {
@@ -68,16 +103,22 @@ public class NetworkClient {
                         break;
                     }
                     Command command = readCommand();
-                    messageHandler.accept(command);
+                    if (command == null) {
+                        continue;
+                    }
+                    for (ReadCommandListener messageListener : listeners) {
+                        messageListener.processReceivedCommand(command);
+                    }
                 } catch (IOException e) {
-//                    e.printStackTrace();
                     System.err.println("Failed to read message from server");
+                    close();
                     break;
                 }
             }
         });
         thread.setDaemon(true);
         thread.start();
+        return thread;
     }
 
     public void close() {
@@ -99,5 +140,9 @@ public class NetworkClient {
         }
 
         return command;
+    }
+    public ReadCommandListener addReadMessageListener(ReadCommandListener listener) {
+        listeners.add(listener);
+        return listener;
     }
 }

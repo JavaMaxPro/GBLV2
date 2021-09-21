@@ -19,7 +19,7 @@ public class AuthService {
 //        return  USERS.get((new User(login,password,null)));
         User requiredUser = new User(login,password);
         for (User user : USERS) {
-            if(requiredUser.equals(user) & !user.isConnect()){
+            if(requiredUser.equals(user) && !user.isConnect()){
                 user.setConnect(true);
                 return user.getUsername();
             }
