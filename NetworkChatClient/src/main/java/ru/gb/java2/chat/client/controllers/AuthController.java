@@ -37,7 +37,9 @@ public class AuthController {
             clientChat.authErrorDialog(INVALID_CREDENTIALS, CREDENTIALS_REQUIRED);
             return;
         }
-
+        if(!connectToServer()){
+            System.out.println("Сервер не подключен");
+        }
 //        String authCommandMessage = String.format("%s %s %s",AUTH_COMMAND,login,password);
 //        System.out.println(AUTH_COMMAND);
         //            network.sendMessage(authCommandMessage);
@@ -45,6 +47,10 @@ public class AuthController {
         System.out.println("Команда отправлена "+ login + password);
     }
 
+    public boolean connectToServer(){
+        NetworkClient networkClient = NetworkClient.getNetwork();
+        return networkClient.isConnected() || networkClient.connect();
+    }
 
     public void setClientChat(ClientChat clientChat) {
         this.clientChat = clientChat;

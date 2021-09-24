@@ -2,11 +2,14 @@ package ru.gb.java2.chat.clientserver;
 
 import ru.gb.java2.chat.clientserver.commands.*;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 public class Command  implements Serializable {
 
+    @Serial
+    private static final long serialVersionUID = 3007561977671083391L;
     private Object data;
     private CommandType type;
 

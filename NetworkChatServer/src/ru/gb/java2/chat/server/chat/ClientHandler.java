@@ -38,15 +38,16 @@ public class ClientHandler {
                 authentication();
                 readMessages();
             } catch (IOException e) {
-                System.err.println("Failed to process message from client");
-//                e.printStackTrace();
+                System.err.println("" +
+                        " to process message from client");
+                e.printStackTrace();
             } finally {
                 try {
                     server.unsubscribe(this);
                     closeConnection();
                 } catch (IOException e) {
                     System.err.println("Failed to close connection");
-//                    e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }).start();
@@ -60,7 +61,7 @@ public class ClientHandler {
                 System.out.println("auth null");
                 continue;
             }
-            System.out.println(command.getType());
+            System.out.println(command.getType()+"аутефикация");
             if(command.getType() == CommandType.AUTH){
                 AuthCommandData data = (AuthCommandData) command.getData();
                 String login = data.getLogin();
@@ -99,7 +100,7 @@ public class ClientHandler {
             System.err.println("Failed to read Command class");
             e.printStackTrace();
         }
-        System.out.println(command.getType());
+        System.out.println(command.getType()+" зашел в команд");
         return command;
     }
 
@@ -110,7 +111,9 @@ public class ClientHandler {
 
     private void readMessages() throws IOException {
         while (true) {
+            System.out.println("жду команду ");
             Command command = readCommand();
+            System.out.println("Читаю команду " + command.getType());
             if (command == null) {
                 continue;
             }
@@ -125,9 +128,10 @@ public class ClientHandler {
                     server.sendPrivateMessage(this,recipient,privateMessage);
                     break;
                 }
-                case CLIENT_MESSAGE: {
+                case PUBLIC_MESSAGE: {
                     PublicMessageCommandData data = (PublicMessageCommandData) command.getData();
                     processMessage(data.getMessage());
+                    break;
                 }
             }
         }

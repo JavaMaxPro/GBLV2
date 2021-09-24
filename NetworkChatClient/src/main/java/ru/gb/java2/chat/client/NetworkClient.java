@@ -36,6 +36,10 @@ public class NetworkClient {
         this(SERVER_HOST, SERVER_PORT);
     }
 
+    public static NetworkClient getNetwork() {
+        return  NetworkClient.getInstance();
+    }
+
     public boolean connect() {
         try {
             socket = new Socket(host, port);
@@ -144,5 +148,9 @@ public class NetworkClient {
     public ReadCommandListener addReadMessageListener(ReadCommandListener listener) {
         listeners.add(listener);
         return listener;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 }
