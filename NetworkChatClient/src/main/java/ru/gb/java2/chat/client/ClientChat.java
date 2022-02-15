@@ -35,7 +35,7 @@ public class ClientChat extends Application {
         setStageForSecondScreen(primaryStage);
 
         Controller controller = fxmlLoader.getController();
-        controller.userList.getItems().addAll("user 1", "user 2 ");
+        controller.userList.getItems().addAll("user 1", "user 2");
 
         Controller controller1 = fxmlLoader.getController();
 

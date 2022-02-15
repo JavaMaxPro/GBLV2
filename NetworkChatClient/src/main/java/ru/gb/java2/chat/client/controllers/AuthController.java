@@ -8,16 +8,15 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import ru.gb.java2.chat.client.ClientChat;
 import ru.gb.java2.chat.client.NetworkClient;
-
-import java.io.IOException;
-import java.util.function.Consumer;
+import ru.gb.java2.chat.client.ReadCommandListener;
+import ru.gb.java2.chat.clientserver.Command;
+import ru.gb.java2.chat.clientserver.CommandType;
+import ru.gb.java2.chat.clientserver.commands.AuthOKCommandData;
 
 public class AuthController {
     public static final String INVALID_CREDENTIALS = "Неккоретный ввод данных";
     public static final String CREDENTIALS_REQUIRED = "Логин и пароль должны быть указаны";
 
-    public static final String AUTH_COMMAND = "/auth";
-    public static final String AUTH_OK_COMMAND = "/authOk";
     @FXML
     private TextField loginField;
     @FXML
@@ -28,6 +27,7 @@ public class AuthController {
     private ClientChat clientChat;
 
     private NetworkClient network;
+    private ReadCommandListener readCommandListener;
 
     @FXML
     public void executeAuth(ActionEvent actionEvent) {
@@ -37,39 +37,57 @@ public class AuthController {
             clientChat.authErrorDialog(INVALID_CREDENTIALS, CREDENTIALS_REQUIRED);
             return;
         }
-
-        String authCommandMessage = String.format("%s %s %s",AUTH_COMMAND,login,password);
-        System.out.println(AUTH_COMMAND);
-        try {
-            network.sendMessage(authCommandMessage);
-            System.out.println("Команда отправлена");
-        } catch (IOException e) {
-            clientChat.showNetworkErrorDialog("Ошибка передачи данных по сети", "Не удалось  отправить сообщение");
-            e.printStackTrace();
+        if(!connectToServer()){
+            System.out.println("Сервер не подключен");
         }
+//        String authCommandMessage = String.format("%s %s %s",AUTH_COMMAND,login,password);
+//        System.out.println(AUTH_COMMAND);
+        //            network.sendMessage(authCommandMessage);
+        network.sendCommand(Command.authCommand(login,password));;
+        System.out.println("Команда отправлена "+ login + password);
     }
 
+    public boolean connectToServer(){
+        NetworkClient networkClient = NetworkClient.getNetwork();
+        return networkClient.isConnected() || networkClient.connect();
+    }
 
     public void setClientChat(ClientChat clientChat) {
         this.clientChat = clientChat;
     }
-    public void setNetwork(NetworkClient network) {
-        this.network = network;
-        network.waitMessages(new Consumer<String>() {
-            @Override
-            public void accept(String message) {
-                if(message.startsWith(AUTH_OK_COMMAND)){
-                    Thread.currentThread().interrupt();
-                    Platform.runLater(()->{
-                        clientChat.getAuthStage().close();
-                    });
-                }else {
-                    Platform.runLater(()->{
+//    public void setNetwork(NetworkClient network) {
+//        this.network = network;
+//        network.waitMessages(new Consumer<Command>() {
+//            @Override
+//            public void accept(Command command) {
+//                if(command.getType()== CommandType.AUTH_OK){
+//                    Thread.currentThread().interrupt();
+//                    Platform.runLater(()->{
+//                        clientChat.getAuthStage().close();
+//                    });
+//                }else {
+//                    Platform.runLater(()->{
+//                        clientChat.showNetworkErrorDialog(INVALID_CREDENTIALS,"Пользователя с таким логином и паролем не существет");
+//                    });
+//                }
+//            }
+//        });
+//    }
+public void setNetwork(NetworkClient network) {
+    this.network = network;
+    readCommandListener = network.addReadMessageListener(new ReadCommandListener() {
+        @Override
+        public void processReceivedCommand(Command command) {
+            if (command.getType() == CommandType.AUTH_OK) {
+                AuthOKCommandData data = (AuthOKCommandData) command.getData();
+                String username = data.getUsername();
+                Platform.runLater(() -> clientChat.getAuthStage().close());
+            } else {
+                Platform.runLater(()->{
                         clientChat.showNetworkErrorDialog(INVALID_CREDENTIALS,"Пользователя с таким логином и паролем не существет");
                     });
-                }
             }
-        });
-    }
-
+        }
+    });
+}
 }

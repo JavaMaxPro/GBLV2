@@ -9,9 +9,9 @@ public class AuthService {
             new User("login3", "pass3", "username3"), "username3"
     );*/
     Set<User> USERS = Set.of(
-           new User("login1", "pass1", "username1",false),
-           new User("login2", "pass2", "username2",false),
-           new User("login3", "pass3", "username3",false)
+           new User("login1", "pass1", "user 1",false),
+           new User("login2", "pass2", "user 2",false),
+           new User("login3", "pass3", "user 3",false)
 
    );
 
